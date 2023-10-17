@@ -5,9 +5,14 @@ using UnityEngine;
 public class PlayerInputHandler : MonoBehaviour
 {
     
-    [SerializeField] Movement movement;
-    PointsHandler pointsHandler;
-    ProjectileThrower projectileThrower;
+    //[SerializeField] Movement movement;
+    //PointsHandler pointsHandler;
+    //ProjectileThrower projectileThrower;
+    
+    public float speed = 10f;
+    public float jumpSpeed = 20f;
+    private float direction = 0f;
+    private Rigidbody2D player;
 
     private AudioSource audioSource;
     public AudioClip pointHitSound;
@@ -16,17 +21,20 @@ public class PlayerInputHandler : MonoBehaviour
         //pointsHandler = GameObject.Find("PointsHandler").GetComponent<PointsHandler>();
         //pointsHandler = GameObject.FindObjectOfType<PointsHandler>(); NO NOT USE THIS, VERY SLOW!! O(n*m)
         //pointsHandler = GameObject.FindGameObjectWithTag("PointsHandler").GetComponent<PointsHandler>();
-        projectileThrower = GetComponent<ProjectileThrower>();
+        //USE THIS ONE
+        //projectileThrower = GetComponent<ProjectileThrower>();
     }
 
     void Start(){
-        pointsHandler = PointsHandler.singleton; //the second fasted option
-
+        //pointsHandler = PointsHandler.singleton; //the second fasted option
         audioSource = GetComponent<AudioSource>();
+
+        player = GetComponent<Rigidbody2D>();
+
     }
 
     void FixedUpdate(){
-        Vector3 vel = Vector3.zero;
+        /*Vector3 vel = Vector3.zero;
         if(Input.GetKey(KeyCode.W)){
             vel.y = 1;
         }if(Input.GetKey(KeyCode.S)){
@@ -35,9 +43,11 @@ public class PlayerInputHandler : MonoBehaviour
             vel.x = -1;
         }if(Input.GetKey(KeyCode.D)){
             vel.x = 1;
-        }
+        }*/
+        
+        //NEED ONE OF THESE IF USING CODE ABOVE FOR MOVEMENT
         //movement.MoverTransform(vel);
-        movement.MoveRB(vel);
+        //movement.MoveRB(vel);
         //pointsHandler.AddDistance(vel.magnitude * Time.deltaTime);
     }
 
@@ -56,9 +66,31 @@ public class PlayerInputHandler : MonoBehaviour
         }*/
 
         //projectiles
-        if(Input.GetKeyDown(KeyCode.Q)){
+        /*if(Input.GetKeyDown(KeyCode.Q)){
             projectileThrower.Throw(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        }*/
+
+        //NEW CODE TO MAKE PLAYER MOVE AND JUMP
+        direction = Input.GetAxis("Horizontal");
+
+        if (direction > 0f)
+        {
+            player.velocity = new Vector2(direction * speed, player.velocity.y);
         }
+        else if (direction < 0f)
+        {
+            player.velocity = new Vector2(direction * speed, player.velocity.y);
+        }
+        else
+        {
+            player.velocity = new Vector2(0, player.velocity.y);
+        }
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            player.velocity = new Vector2(player.velocity.x, jumpSpeed);
+        }
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
