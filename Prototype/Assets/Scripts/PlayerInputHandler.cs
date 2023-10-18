@@ -17,6 +17,11 @@ public class PlayerInputHandler : MonoBehaviour
     private AudioSource audioSource;
     public AudioClip pointHitSound;
 
+    public Transform groundCheck;
+    public float groundCheckRadius;
+    public LayerMask groundLayer;
+    private bool isTouchingGround;
+
     void Awake(){
         //pointsHandler = GameObject.Find("PointsHandler").GetComponent<PointsHandler>();
         //pointsHandler = GameObject.FindObjectOfType<PointsHandler>(); NO NOT USE THIS, VERY SLOW!! O(n*m)
@@ -71,6 +76,8 @@ public class PlayerInputHandler : MonoBehaviour
         }*/
 
         //NEW CODE TO MAKE PLAYER MOVE AND JUMP
+        isTouchingGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
         direction = Input.GetAxis("Horizontal");
 
         if (direction > 0f)
@@ -86,7 +93,7 @@ public class PlayerInputHandler : MonoBehaviour
             player.velocity = new Vector2(0, player.velocity.y);
         }
 
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && isTouchingGround)
         {
             player.velocity = new Vector2(player.velocity.x, jumpSpeed);
         }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3397301548555353971}
   - component: {fileID: 8309526588257648792}
   - component: {fileID: 178816812468601578}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ConveroyBelt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,7 +184,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4386672676673673898}
   - component: {fileID: 1799100027374472927}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
