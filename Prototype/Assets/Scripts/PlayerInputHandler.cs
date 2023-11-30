@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerInputHandler : MonoBehaviour
 {
@@ -9,8 +10,8 @@ public class PlayerInputHandler : MonoBehaviour
     //PointsHandler pointsHandler;
     //ProjectileThrower projectileThrower;
     
-    public float speed = 10f;
-    public float jumpSpeed = 20f;
+    public float speed = 5f;
+    public float jumpSpeed = 10f;
     private float direction = 0f;
     private Rigidbody2D player;
 
@@ -21,6 +22,30 @@ public class PlayerInputHandler : MonoBehaviour
     public float groundCheckRadius;
     public LayerMask groundLayer;
     private bool isTouchingGround;
+    public string mainMenuSceneName = "Shop1";
+    public string gameScene = "GameScene";
+    private static PointsHandler pointsHandler;
+    public static PlayerInputHandler _instance;
+    [SerializeField] AnimationStateChanger animationStateChanger;
+    [SerializeField] Transform body;
+
+    public static PlayerInputHandler Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<PlayerInputHandler>();
+
+                if (_instance == null)
+                {
+                    Debug.LogError("PlayerInputHandler is not in the scene.");
+                }
+            }
+
+            return _instance;
+        }
+    }
 
     void Awake(){
         //pointsHandler = GameObject.Find("PointsHandler").GetComponent<PointsHandler>();
@@ -35,7 +60,7 @@ public class PlayerInputHandler : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
 
         player = GetComponent<Rigidbody2D>();
-
+        pointsHandler = PointsHandler.singleton;
     }
 
     void FixedUpdate(){
@@ -82,11 +107,19 @@ public class PlayerInputHandler : MonoBehaviour
 
         if (direction > 0f)
         {
+            body.localScale = new Vector3(3,3,1);
+            animationStateChanger.ChangeAnimationState("WalkMeepis");
             player.velocity = new Vector2(direction * speed, player.velocity.y);
         }
         else if (direction < 0f)
         {
+            body.localScale = new Vector3(-3,3,1);
+            animationStateChanger.ChangeAnimationState("WalkMeepis");
             player.velocity = new Vector2(direction * speed, player.velocity.y);
+        }else if (direction == 0f)
+        {
+            animationStateChanger.ChangeAnimationState("IdleMeepis");
+            //player.velocity = new Vector2(direction * speed, player.velocity.y);
         }
         else
         {
@@ -107,10 +140,52 @@ public class PlayerInputHandler : MonoBehaviour
             // Play the point hit sound
             audioSource.PlayOneShot(pointHitSound);
 
-            // Handle other logic related to point collection
-            // For example, increment the player's score or destroy the point object.
+            pointsHandler.IncreaseScore(1);
+            Destroy(other.gameObject);
         }
+
+        if (other.CompareTag("PlusSpeed"))
+        {
+            // Play the point hit sound
+            audioSource.PlayOneShot(pointHitSound);
+
+            this.speed += 5f;
+            pointsHandler.DecreaseScore(5);
+            Destroy(other.gameObject);
+        }
+
+        if (other.CompareTag("PlusJump"))
+        {
+            // Play the point hit sound
+            audioSource.PlayOneShot(pointHitSound);
+
+            this.jumpSpeed += 2f;
+            pointsHandler.DecreaseScore(5);
+            Destroy(other.gameObject);
+        }
+
+        // Check if the collision is with an obstacle
+        if (other.gameObject.CompareTag("obstacle"))
+        {
+            // Destroy the player GameObject
+            pointsHandler.SaveScore();
+            //Destroy(gameObject);
+            SceneManager.LoadScene(mainMenuSceneName);
+        }
+
+        if (other.gameObject.CompareTag("Door"))
+        {
+            // Destroy the player GameObject
+            pointsHandler.SaveScore();
+            //Destroy(gameObject);
+            SceneManager.LoadScene(gameScene);
+        }
+
     }
 
+    public void IncreasePlayerSpeed(float speedIncrease)
+    {
+        speed += speedIncrease;
+    }
 
 }

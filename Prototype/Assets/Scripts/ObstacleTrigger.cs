@@ -11,6 +11,7 @@ public class ObstacleTrigger : MonoBehaviour
     {
         if (other.CompareTag("obstacle")) // Replace "Obstacle" with the tag of your obstacles
         {
+            //Destroy(this.gameObject);
             // Load the main menu scene when the player hits an obstacle
             SceneManager.LoadScene(mainMenuSceneName);
         }

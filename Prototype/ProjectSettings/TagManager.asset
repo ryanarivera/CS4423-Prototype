@@ -7,6 +7,9 @@ TagManager:
   - PointsHandler
   - points
   - obstacle
+  - Door
+  - PlusSpeed
+  - PlusJump
   layers:
   - Default
   - TransparentFX

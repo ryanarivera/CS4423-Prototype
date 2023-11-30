@@ -30,8 +30,8 @@ public class RandomBoxSpawner : MonoBehaviour
                     Destroy(newBox,10);
                     shapeType = 3;
                 } else if(shapeType == 3){
-                    GameObject newCircle = Instantiate(circlePrefab, new Vector3(Random.Range(-5,5),8,0),Quaternion.identity);
-                    Destroy(newCircle,10);
+                    GameObject newBox = Instantiate(boxPrefab, new Vector3(Random.Range(-5,5),8,0),Quaternion.identity);
+                    Destroy(newBox,10);
                     shapeType = 1;
                 }
 

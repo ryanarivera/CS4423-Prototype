@@ -15,4 +15,8 @@ public class MainMenuHandler : MonoBehaviour
         Application.Quit(); //does not work in the editor
     }
 
+    public void ResetCoins(){
+        PointsHandler.singleton.ResetScore();
+    }
+
 }
