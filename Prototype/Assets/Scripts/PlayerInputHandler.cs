@@ -171,7 +171,7 @@ public class PlayerInputHandler : MonoBehaviour
             
             //Destroy(gameObject);
             SceneManager.LoadScene("MainMenu");
-            pointsHandler.ClearScore();
+            //pointsHandler.ClearScore();
         }
 
         if (other.gameObject.CompareTag("Door"))
