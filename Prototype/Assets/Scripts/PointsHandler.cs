@@ -86,6 +86,13 @@ public class PointsHandler : MonoBehaviour
         SaveScore();
     }
 
+    public void ClearScore()
+    {
+        score = 0;
+        UpdateScoreText();
+        SaveScore();
+    }
+
     // public void AddTenScore()
     // {
     //     score += 10;

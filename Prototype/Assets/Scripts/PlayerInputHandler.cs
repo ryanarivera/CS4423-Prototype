@@ -22,7 +22,7 @@ public class PlayerInputHandler : MonoBehaviour
     public float groundCheckRadius;
     public LayerMask groundLayer;
     private bool isTouchingGround;
-    public string mainMenuSceneName = "Shop1";
+    public string mainMenuSceneName = "MainMenu";
     public string gameScene = "GameScene";
     private static PointsHandler pointsHandler;
     public static PlayerInputHandler _instance;
@@ -168,9 +168,10 @@ public class PlayerInputHandler : MonoBehaviour
         if (other.gameObject.CompareTag("obstacle"))
         {
             // Destroy the player GameObject
-            pointsHandler.SaveScore();
+            
             //Destroy(gameObject);
-            SceneManager.LoadScene(mainMenuSceneName);
+            SceneManager.LoadScene("MainMenu");
+            pointsHandler.ClearScore();
         }
 
         if (other.gameObject.CompareTag("Door"))
@@ -178,7 +179,7 @@ public class PlayerInputHandler : MonoBehaviour
             // Destroy the player GameObject
             pointsHandler.SaveScore();
             //Destroy(gameObject);
-            SceneManager.LoadScene(gameScene);
+            SceneManager.LoadScene("Shop1");
         }
 
     }
